@@ -19,15 +19,16 @@ public class ToolchainsCommand implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         stream.println("Toolkit for manipulate with Maven toolchains.xml");
+        stream.println();
         return 0;
     }
 
     public static void main(final String... args) {
         final var stream = System.out;
         final var exitCode = new CommandLine(new ToolchainsCommand(stream))
-                .addSubcommand(new HelpCommand())
                 .addSubcommand(new GenerateCommand())
                 .addSubcommand(new CheckCommand())
+                .addSubcommand(new ListCommand())
                 // @todo: add subcommands
                 .execute(args);
         System.exit(exitCode);
