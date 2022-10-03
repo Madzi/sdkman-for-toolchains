@@ -1,5 +1,6 @@
 package madzi.toolchains.command;
 
+import java.io.PrintStream;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
@@ -9,15 +10,25 @@ import picocli.CommandLine;
 )
 public class ToolchainsCommand implements Callable<Integer> {
 
+    private final PrintStream stream;
+
+    public ToolchainsCommand(final PrintStream stream) {
+        this.stream = stream;
+    }
+
     @Override
     public Integer call() throws Exception {
-        // @todo add output version and help
+        stream.println("Toolkit for manipulate with Maven toolchains.xml");
         return 0;
     }
 
     public static void main(final String... args) {
-        final var exitCode = new CommandLine(new ToolchainsCommand())
-                // @todo add subcommands
+        final var stream = System.out;
+        final var exitCode = new CommandLine(new ToolchainsCommand(stream))
+                .addSubcommand(new HelpCommand())
+                .addSubcommand(new GenerateCommand())
+                .addSubcommand(new CheckCommand())
+                // @todo: add subcommands
                 .execute(args);
         System.exit(exitCode);
     }
