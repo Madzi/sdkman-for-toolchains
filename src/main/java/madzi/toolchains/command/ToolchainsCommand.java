@@ -1,7 +1,11 @@
 package madzi.toolchains.command;
 
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
+import madzi.toolchains.infra.Environment;
+import madzi.toolchains.infra.internal.LocalFileSystem;
+import madzi.toolchains.repo.internal.LocalToolchainsRepository;
 import picocli.CommandLine;
 
 /**
@@ -40,10 +44,12 @@ public class ToolchainsCommand implements Callable<Integer> {
      */
     public static void main(final String... args) {
         final var stream = System.out;
+        final var environment = Environment.builder().build();
+        final var fileSystem = new LocalFileSystem(environment);
         final var exitCode = new CommandLine(new ToolchainsCommand(stream))
                 .addSubcommand(new GenerateCommand(stream))
                 .addSubcommand(new CheckCommand(stream))
-                .addSubcommand(new ListCommand(stream))
+                .addSubcommand(new ListCommand(stream, new LocalToolchainsRepository(fileSystem.mavenToolchains())))
                 // @todo add subcommands
                 .execute(args);
         System.exit(exitCode);

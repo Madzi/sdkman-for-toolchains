@@ -6,4 +6,6 @@ package madzi.toolchains.repo;
  * @author de
  */
 public interface ToolchainsRepository {
+
+    void list();
 }
