@@ -4,7 +4,10 @@ import java.io.PrintStream;
 import java.util.concurrent.Callable;
 import madzi.toolchains.infra.Environment;
 import madzi.toolchains.infra.internal.LocalFileSystem;
+import madzi.toolchains.repo.SdkmanJdkParser;
+import madzi.toolchains.repo.internal.BaseSdkmanJdkParser;
 import madzi.toolchains.repo.internal.FileToolchainsLoader;
+import madzi.toolchains.repo.internal.LocalSdkmanRepository;
 import madzi.toolchains.repo.internal.LocalToolchainsRepository;
 import madzi.toolchains.repo.internal.StaxToolchainsXmlConverter;
 import picocli.CommandLine;
@@ -47,11 +50,12 @@ public class ToolchainsCommand implements Callable<Integer> {
         final var stream = System.out;
         final var environment = Environment.builder().build();
         final var fileSystem = new LocalFileSystem(environment);
+        final var sdkmanRepo = new LocalSdkmanRepository(fileSystem.sdkmanJdks(), new BaseSdkmanJdkParser());
+        final var toolchainsRepo = new LocalToolchainsRepository(new FileToolchainsLoader(fileSystem.mavenToolchains(), new StaxToolchainsXmlConverter()));
         final var exitCode = new CommandLine(new ToolchainsCommand(stream))
-                .addSubcommand(new GenerateCommand(stream))
-                .addSubcommand(new CheckCommand(stream))
-                .addSubcommand(new ListCommand(stream, new LocalToolchainsRepository(new FileToolchainsLoader(fileSystem.mavenToolchains(), new StaxToolchainsXmlConverter()))))
-                // @todo #1/DEV add subcommands
+                .addSubcommand(new GenerateCommand(stream, toolchainsRepo, sdkmanRepo))
+                .addSubcommand(new CheckCommand(stream, toolchainsRepo))
+                .addSubcommand(new ListCommand(stream, toolchainsRepo))
                 .execute(args);
         System.exit(exitCode);
     }

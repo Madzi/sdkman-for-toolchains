@@ -30,13 +30,13 @@ public class ListCommand implements Callable<Integer> {
             final var builder = new StringBuffer()
                     .append("=> ")
                     .append(toolchain.type())
-                    .append(" - ")
+                    .append(" (")
                     .append(toolchain.provides().version());
             if (null != toolchain.provides().vendor()) {
-                builder.append(" - ")
+                builder.append(", ")
                        .append(toolchain.provides().vendor());
             }
-            builder.append(" -> ")
+            builder.append(") -> ")
                    .append(toolchain.configuration().jdkHome());
             stream.println(builder.toString());
         });
