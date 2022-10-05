@@ -32,7 +32,7 @@ public class LocalFileSystem implements FileSystem {
         return userHome().resolve(".sdkman").resolve("candidates").resolve("java");
     }
 
-    // @todo can be added applicationFolder & currentFolder
+    // @todo #1/DEV can be added applicationFolder & currentFolder
 
     private enum SysVariable implements Environment.Variable {
         USER_HOME("user.home");

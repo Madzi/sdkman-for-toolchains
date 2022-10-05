@@ -23,7 +23,7 @@ public class GenerateCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        // @todo implements generation of toolchains.xml
+        // @todo #1/DEV implements generation of toolchains.xml
         return 0;
     }
 }

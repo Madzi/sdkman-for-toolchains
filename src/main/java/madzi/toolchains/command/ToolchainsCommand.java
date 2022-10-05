@@ -1,7 +1,6 @@
 package madzi.toolchains.command;
 
 import java.io.PrintStream;
-import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import madzi.toolchains.infra.Environment;
 import madzi.toolchains.infra.internal.LocalFileSystem;
@@ -52,7 +51,7 @@ public class ToolchainsCommand implements Callable<Integer> {
                 .addSubcommand(new GenerateCommand(stream))
                 .addSubcommand(new CheckCommand(stream))
                 .addSubcommand(new ListCommand(stream, new LocalToolchainsRepository(new FileToolchainsLoader(fileSystem.mavenToolchains(), new StaxToolchainsXmlConverter()))))
-                // @todo add subcommands
+                // @todo #1/DEV add subcommands
                 .execute(args);
         System.exit(exitCode);
     }
