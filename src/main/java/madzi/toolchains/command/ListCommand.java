@@ -3,8 +3,6 @@ package madzi.toolchains.command;
 import java.io.PrintStream;
 import java.util.concurrent.Callable;
 import madzi.toolchains.repo.ToolchainsRepository;
-import org.xembly.Directives;
-import org.xembly.Xembler;
 import picocli.CommandLine;
 
 /**
@@ -28,8 +26,20 @@ public class ListCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        // @todo implements list existing toolchains
-        repository.list();
+        repository.list().forEach(toolchain -> {
+            final var builder = new StringBuffer()
+                    .append("=> ")
+                    .append(toolchain.type())
+                    .append(" - ")
+                    .append(toolchain.provides().version());
+            if (null != toolchain.provides().vendor()) {
+                builder.append(" - ")
+                       .append(toolchain.provides().vendor());
+            }
+            builder.append(" -> ")
+                   .append(toolchain.configuration().jdkHome());
+            stream.println(builder.toString());
+        });
         return 0;
     }
 }

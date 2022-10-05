@@ -5,7 +5,9 @@ import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import madzi.toolchains.infra.Environment;
 import madzi.toolchains.infra.internal.LocalFileSystem;
+import madzi.toolchains.repo.internal.FileToolchainsLoader;
 import madzi.toolchains.repo.internal.LocalToolchainsRepository;
+import madzi.toolchains.repo.internal.StaxToolchainsXmlConverter;
 import picocli.CommandLine;
 
 /**
@@ -49,7 +51,7 @@ public class ToolchainsCommand implements Callable<Integer> {
         final var exitCode = new CommandLine(new ToolchainsCommand(stream))
                 .addSubcommand(new GenerateCommand(stream))
                 .addSubcommand(new CheckCommand(stream))
-                .addSubcommand(new ListCommand(stream, new LocalToolchainsRepository(fileSystem.mavenToolchains())))
+                .addSubcommand(new ListCommand(stream, new LocalToolchainsRepository(new FileToolchainsLoader(fileSystem.mavenToolchains(), new StaxToolchainsXmlConverter()))))
                 // @todo add subcommands
                 .execute(args);
         System.exit(exitCode);

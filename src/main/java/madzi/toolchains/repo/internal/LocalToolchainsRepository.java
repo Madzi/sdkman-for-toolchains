@@ -1,11 +1,9 @@
 package madzi.toolchains.repo.internal;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.Collection;
+import madzi.toolchains.domain.Toolchain;
+import madzi.toolchains.repo.ToolchainsLoader;
 import madzi.toolchains.repo.ToolchainsRepository;
-import org.xml.sax.SAXException;
 
 /**
  * The implementation of ToolchainsRepository for local ~/.m2/toolchains.xml file.
@@ -14,29 +12,32 @@ import org.xml.sax.SAXException;
  */
 public class LocalToolchainsRepository implements ToolchainsRepository {
 
-    private final Path filePath;
+    private final ToolchainsRepository repository;
+    private final ToolchainsLoader loader;
 
-    public LocalToolchainsRepository(final Path filePath) {
-        this.filePath = filePath;
+    public LocalToolchainsRepository(final ToolchainsLoader loader) {
+        this.repository = new InMemoryToolchainsRepository();
+        this.loader = loader;
+        loader.load().forEach(repository::add);
     }
 
     @Override
-    public void list() {
-        try {
-            System.out.println("NODE LIST");
-            final var factory = DocumentBuilderFactory.newInstance();
-            final var builder = factory.newDocumentBuilder();
-            final var document = builder.parse(filePath.toFile());
-            final var nodeList = document.getElementsByTagName("toolchain");
-            final var len = nodeList.getLength();
-            System.out.println("Found: " + len + " record(s)");
-            for (int idx = 0; idx < len; ++idx) {
-                System.out.println(nodeList.item(idx));
-                // @todo extract correc nodes with types: toolchain/netbeans/...
-            }
-        } catch (final IOException | SAXException | ParserConfigurationException exception) {
-            // @todo proper exception handling
-            exception.printStackTrace();
-        }
+    public Collection<Toolchain> list() {
+        return repository.list();
+    }
+
+    @Override
+    public void add(final Toolchain toolchain) {
+        repository.add(toolchain);
+    }
+
+    @Override
+    public void delete(final Toolchain toolchain) {
+        repository.delete(toolchain);
+    }
+
+    @Override
+    public void close() throws Exception {
+        loader.save(repository.list());
     }
 }
