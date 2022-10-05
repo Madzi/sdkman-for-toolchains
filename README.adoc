@@ -1,0 +1,55 @@
+= Toolchains
+
+Some times we need to be able to build (run) Java project with specific version of JDK.
+To be able to do this apache group provide special maven plugin named https://maven.apache.org/plugins/maven-toolchains-plugin/[maven-toolchains-plugin].
+
+// @todo
+
+== Usage
+
+Currently application support 3 command(s):
+
+* check
+* generate
+* list
+
+Run `--help` option to check what application can do:
+
+.Command line to get help for application
+[source,bash]
+----
+> toolchains --help
+----
+
+=== check
+
+Checks if all present into `~/.m2/toolchains.xml`
+
+.Command line to check existing toolchains.xml
+[source,bash]
+----
+> toolchains check
+----
+
+=== generate
+
+Current version not support fully this command WIP.
+
+.Command line to generate toolchains.xml from pieces
+[source,bash]
+----
+> toolchains generate
+----
+
+=== list
+
+To be able to see what contains into your `~/.m2/toolchains.xml` file please use list command:
+
+.Command line to list toolchain into toolchains.xml
+[source,bash]
+----
+> toolchains list
+----
+
+You can see a list of JDKs installed into your machine and listed into `~/.m2/toolchains.xml` file. 
+

@@ -16,7 +16,10 @@ public class BaseSdkmanJdkParser implements SdkmanJdkParser {
             throw new IllegalArgumentException("Provided path cannot be NULL");
         }
         final var builder = Toolchain.builder();
+        final var name = path.toFile().getName();
+        final var parts = name.split("-");
         // @todo #5/DEV implements parsing jdk folder name
         return builder.build();
     }
+
 }
