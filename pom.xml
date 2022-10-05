@@ -101,6 +101,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
+            <!-- @todo #1/DEV need to add gitflow plugin -->
         </plugins>
     </build>
 
