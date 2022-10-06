@@ -94,8 +94,9 @@ public class StaxToolchainsXmlConverter implements ToolchainsXmlConverter {
     public String toXml(final Iterable<Toolchain> toolchains) {
         try (var stream = new ByteArrayOutputStream()) {
             final var output = XMLOutputFactory.newFactory();
-            final var writer = output.createXMLStreamWriter(stream);
-            writer.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
+            final var charsetName = StandardCharsets.UTF_8.name();
+            final var writer = output.createXMLStreamWriter(stream, charsetName);
+            writer.writeStartDocument(charsetName, "1.0");
             writer.writeStartElement(TAG_TOOLCHAINS);
             writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
             writer.writeAttribute("xmlns", "http://maven.apache.org/TOOLCHAINS/1.1.0");
