@@ -18,7 +18,9 @@ jobs:
         version: 22.2.r17-grl
     - uses: actions/setup-java@1
       id: setup-java
-      jdkFile: ${{ steps.sdkman.outputs.file }}
+      with:
+        java-version: 17
+        jdkFile: ${{ steps.sdkman.outputs.file }}
     - name: Setup GRAALVM_HOME
       run: set GRAALVM_HOME=$JAVA_HOME
     - name: Build JAR with Maven
