@@ -1,8 +1,12 @@
 package madzi.toolchains.command;
 
-import java.io.PrintStream;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
+import madzi.toolchains.domain.Toolchain;
 import madzi.toolchains.repo.ToolchainsRepository;
+import madzi.toolchains.service.PrintService;
 import picocli.CommandLine;
 
 /**
@@ -16,30 +20,18 @@ import picocli.CommandLine;
 )
 public class ListCommand implements Callable<Integer> {
 
-    private final PrintStream stream;
-    private final ToolchainsRepository repository;
+    private final PrintService printService;
+    private final ToolchainsRepository toolchainsRepo;
 
-    public ListCommand(final PrintStream stream, final ToolchainsRepository repository) {
-        this.stream = stream;
-        this.repository = repository;
+    public ListCommand(final PrintService printService, final ToolchainsRepository repository) {
+        this.printService = printService;
+        this.toolchainsRepo = repository;
     }
 
     @Override
     public Integer call() throws Exception {
-        repository.list().forEach(toolchain -> {
-            final var builder = new StringBuffer()
-                    .append("=> ")
-                    .append(toolchain.type())
-                    .append(" (")
-                    .append(toolchain.provides().version());
-            if (null != toolchain.provides().vendor()) {
-                builder.append(", ")
-                       .append(toolchain.provides().vendor());
-            }
-            builder.append(") -> ")
-                   .append(toolchain.configuration().jdkHome());
-            stream.println(builder.toString());
-        });
+        // @todo #1/DEV sort toolchains for output
+        toolchainsRepo.list().forEach(item -> printService.println(printService.format(item)));
         return 0;
     }
 }

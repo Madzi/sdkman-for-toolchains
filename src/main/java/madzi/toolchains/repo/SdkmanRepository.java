@@ -1,7 +1,7 @@
 package madzi.toolchains.repo;
 
 import java.util.Collection;
-import madzi.toolchains.domain.Toolchain;
+import madzi.toolchains.domain.JdkRecord;
 
 /**
  *
@@ -9,5 +9,5 @@ import madzi.toolchains.domain.Toolchain;
  */
 public interface SdkmanRepository {
 
-    Collection<Toolchain> list();
+    Collection<JdkRecord> list();
 }

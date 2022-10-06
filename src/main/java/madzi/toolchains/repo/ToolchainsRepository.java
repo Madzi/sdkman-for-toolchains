@@ -1,6 +1,6 @@
 package madzi.toolchains.repo;
 
-import java.util.Collection;
+import java.util.List;
 import madzi.toolchains.domain.Toolchain;
 
 /**
@@ -10,7 +10,7 @@ import madzi.toolchains.domain.Toolchain;
  */
 public interface ToolchainsRepository extends AutoCloseable {
 
-    Collection<Toolchain> list();
+    List<Toolchain> list();
 
     void add(Toolchain toolchain);
 

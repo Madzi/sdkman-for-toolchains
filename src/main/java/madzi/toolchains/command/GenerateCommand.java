@@ -1,9 +1,11 @@
 package madzi.toolchains.command;
 
-import java.io.PrintStream;
 import java.util.concurrent.Callable;
+import madzi.toolchains.domain.JdkVersion;
+import madzi.toolchains.domain.Toolchain;
 import madzi.toolchains.repo.SdkmanRepository;
 import madzi.toolchains.repo.ToolchainsRepository;
+import madzi.toolchains.service.PrintService;
 import picocli.CommandLine;
 
 /**
@@ -17,19 +19,38 @@ import picocli.CommandLine;
 )
 public class GenerateCommand implements Callable<Integer> {
 
-    private final ToolchainsRepository toolchainsRepo;
+    private final PrintService printService;
     private final SdkmanRepository sdkmanRepo;
-    private final PrintStream stream;
+    private final ToolchainsRepository toolchainsRepo;
 
-    public GenerateCommand(final PrintStream stream, final ToolchainsRepository toolchainsRepo, final SdkmanRepository sdkmanRepo) {
-        this.stream = stream;
-        this.toolchainsRepo = toolchainsRepo;
+    public GenerateCommand(final PrintService printService, final ToolchainsRepository toolchainsRepo, final SdkmanRepository sdkmanRepo) {
+        this.printService = printService;
         this.sdkmanRepo = sdkmanRepo;
+        this.toolchainsRepo = toolchainsRepo;
     }
 
     @Override
     public Integer call() throws Exception {
-        sdkmanRepo.list().forEach(toolchainsRepo::add);
+        printService.println("Generating ...");
+        // @todo #1/DEV the id for toolchains.xml should be able to defined in external config
+        sdkmanRepo.list().forEach(jdkRecord -> {
+            printService.println("Detected: " + printService.format(jdkRecord));
+            toolchainsRepo.add(Toolchain.builder()
+                    .type(Toolchain.Type.JDK)
+                    .version(String.valueOf(jdkRecord.version().major()))
+                    .vendor(jdkRecord.vendor().name().toLowerCase().replaceAll("_", "-"))
+                    .path(jdkRecord.path())
+                    .build());
+        });
+        // @todo #1/DEV generate list for toolchains.xml
         return 0;
+    }
+
+    private String printVersion(final JdkVersion version) {
+        if (version.major() > 8) {
+            return String.valueOf(version.major());
+        } else {
+            return "1." + String.valueOf(version.major());
+        }
     }
 }

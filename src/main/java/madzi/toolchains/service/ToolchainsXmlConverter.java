@@ -1,4 +1,4 @@
-package madzi.toolchains.repo;
+package madzi.toolchains.service;
 
 import madzi.toolchains.domain.Toolchain;
 

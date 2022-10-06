@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import madzi.toolchains.domain.Toolchain;
 import madzi.toolchains.repo.ToolchainsLoader;
-import madzi.toolchains.repo.ToolchainsXmlConverter;
+import madzi.toolchains.service.ToolchainsXmlConverter;
 
 /**
  *

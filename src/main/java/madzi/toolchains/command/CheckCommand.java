@@ -1,9 +1,9 @@
 package madzi.toolchains.command;
 
-import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import madzi.toolchains.repo.ToolchainsRepository;
+import madzi.toolchains.service.PrintService;
 import picocli.CommandLine;
 
 /**
@@ -17,40 +17,29 @@ import picocli.CommandLine;
 )
 public class CheckCommand implements Callable<Integer> {
 
-    private final PrintStream stream;
-    private final ToolchainsRepository repository;
+    private final PrintService printService;
+    private final ToolchainsRepository toolchainsRepo;
 
     /**
      * Creates instance of check command.
      *
-     * @param stream the output stream
+     * @param printService
+     * @param repository
      */
-    public CheckCommand(final PrintStream stream, final ToolchainsRepository repository) {
-        this.stream = stream;
-        this.repository = repository;
+    public CheckCommand(final PrintService printService, final ToolchainsRepository repository) {
+        this.printService = printService;
+        this.toolchainsRepo = repository;
     }
 
     @Override
     public Integer call() throws Exception {
         // @todo #1/DEV add check that toolchains.xml contains correct records
-        repository.list().forEach(toolchain -> {
-            final var builder = new StringBuilder();
-            builder.append("Checking: ")
-                   .append(toolchain.type())
-                   .append(" (")
-                   .append(toolchain.provides().version());
-            if (null != toolchain.provides().vendor()) {
-                builder.append(", ")
-                       .append(toolchain.provides().vendor());
-            }
-            builder.append(") ")
-                   .append(toolchain.configuration().jdkHome());
-            if (check(toolchain.configuration().jdkHome())) {
-                builder.append(" ... OK");
-            } else {
-                builder.append(" ... FAIL (folder does not exists)");
-            }
-            stream.println(builder.toString());
+        toolchainsRepo.list().forEach(toolchain -> {
+            printService.println(new StringBuilder()
+                    .append("Checking: ")
+                    .append(printService.format(toolchain))
+                    .append(check(toolchain.configuration().jdkHome()) ? " ... OK" : " ... FAIL (folder does not exists)")
+                    .toString());
         });
         return 0;
     }

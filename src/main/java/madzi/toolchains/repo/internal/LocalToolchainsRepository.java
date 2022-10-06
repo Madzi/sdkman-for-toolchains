@@ -1,6 +1,6 @@
 package madzi.toolchains.repo.internal;
 
-import java.util.Collection;
+import java.util.List;
 import madzi.toolchains.domain.Toolchain;
 import madzi.toolchains.repo.ToolchainsLoader;
 import madzi.toolchains.repo.ToolchainsRepository;
@@ -22,18 +22,20 @@ public class LocalToolchainsRepository implements ToolchainsRepository {
     }
 
     @Override
-    public Collection<Toolchain> list() {
+    public List<Toolchain> list() {
         return repository.list();
     }
 
     @Override
     public void add(final Toolchain toolchain) {
         repository.add(toolchain);
+        loader.save(repository.list());
     }
 
     @Override
     public void delete(final Toolchain toolchain) {
         repository.delete(toolchain);
+        loader.save(repository.list());
     }
 
     @Override

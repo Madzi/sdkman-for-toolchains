@@ -1,8 +1,8 @@
 package madzi.toolchains.repo.internal;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import madzi.toolchains.domain.Toolchain;
 import madzi.toolchains.repo.ToolchainsRepository;
@@ -16,8 +16,8 @@ public class InMemoryToolchainsRepository implements ToolchainsRepository {
     }
 
     @Override
-    public Collection<Toolchain> list() {
-        return Collections.unmodifiableCollection(toolchains);
+    public List<Toolchain> list() {
+        return new ArrayList(toolchains);
     }
 
     @Override
