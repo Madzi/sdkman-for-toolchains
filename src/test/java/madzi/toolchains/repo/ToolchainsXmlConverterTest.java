@@ -24,9 +24,9 @@ public class ToolchainsXmlConverterTest {
                                          <version>17</version>
                                          <vendor>oracle</vendor>
                                      </provides>
-                                     <configuraion>
+                                     <configuration>
                                          <jdkHome>/home</jdkHome>
-                                     </configuraion>
+                                     </configuration>
                                  </toolchain>
                              </toolchains>
                              """;

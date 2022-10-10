@@ -30,7 +30,7 @@ public class StaxToolchainsXmlConverter implements ToolchainsXmlConverter {
     private static final String TAG_PROVIDES = "provides";
     private static final String TAG_VERSION = "version";
     private static final String TAG_VENDOR = "vendor";
-    private static final String TAG_CONFIGURATION = "configuraion";
+    private static final String TAG_CONFIGURATION = "configuration";
     private static final String TAG_JDK_HOME = "jdkHome";
     private static final String TAG_INSTALL_DIR = "installDir";
 
